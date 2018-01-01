@@ -1,5 +1,5 @@
 SmartGear multi-system emulator<br>
-Written by Larry Bank
+Written by Larry Bank<br>
 Copyright (c) 1998-2017 BitBank Software, Inc.
 
 bitbank@pobox.com
@@ -27,6 +27,7 @@ to run on a "GameBoyZero" which makes use of a SPI LCD (e.g. ILI9341).
 Requirements:<br>
 -------------<br>
 For GTK - libgtk-3-dev<br>
+For SPI - libspi_lcd (https://github.com/bitbank2/SPI_LCD)<br>
 For both - libpng-dev libsdl2-dev<br>
 e.g. sudo apt install libgtk-3-dev<br>
 
@@ -56,8 +57,6 @@ this problem, the makefile assigns root privilege to the executable. This
 allows it to run as root and not interfere with audio drivers. To start either
 version, just type ./sg or ./sg_spi on the command line.
 <br>
-Running:<br>
---------<br>
 The GTK executable is named 'sg' and the SPI LCD version is named 'sg_spi'. In
 order to use the SPI kernel driver and the GPIO pins, the sg_spi executable
 must run as root. If you run it with 'sudo', it can interfere with the audio
@@ -66,5 +65,5 @@ this problem, the makefile assigns root privilege to the executable. This
 allows it to run as root and not interfere with audio drivers. To start either
 version, just type ./sg or ./sg_spi on the command line.
 <br>
-sg_spi: The menus and file selector are navigated with by pressing up/down/A on the given controller (gamepad/keyboard/GPIO).
+sg_spi: The menus and file selector are navigated by pressing up/down/A on the given controller (gamepad/keyboard/GPIO).
 
