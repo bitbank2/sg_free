@@ -1,0 +1,91 @@
+PROCESSOR:=$(shell uname -m)
+ifeq ($(PROCESSOR), armv7l)
+ASM=graphics
+ASMTYPE=ARM
+CFLAGS=-c -ggdb -Wall -DUSE_SIMD -DPORTABLE -O2 -marm -march=armv7-a -mfloat-abi=hard -mfpu=neon
+else ifeq ($(PROCESSOR), armv6l)
+ASM=graphics
+ASMTYPE=ARM
+CFLAGS=-c -I/usr/local/include -Wall -O3 -DUSE_ARM_ASM -mcpu=arm1136j-s -DPORTABLE
+else ifeq ($(PROCESSOR), aarch64)
+ASM=a64_graphics
+ASMTYPE=ARM64
+CFLAGS=-c -ggdb -Wall -D_64BITS_ -DUSE_SIMD -DPORTABLE -O3
+else
+ASM=x64_graphics
+ASMTYPE=X86
+CFLAGS=-c -pg -ggdb -I/usr/local/include -DUSE_SIMD -mssse3 -Wall -D_64BITS_ -DPORTABLE -O2
+endif
+LIBS = -lspi_lcd -lSDL2 -lpthread -lpng -lm -lz
+#LIBS = -lspi_lcd -lSDL2 -lpigpio -lpthread -lpng -lm -lz
+
+all: sg_spi
+
+sg_spi: sg_spi.o nes6502.o \
+ raster.o common.o unzip.o \
+ gbcpu.o sn76_gg.o screenshot.o\
+gbc.o gg.o nes.o emuio.o mixer.o sound.o z80.o smartgear.o gb_cpu.o $(ASM).o
+	$(CC) sg_spi.o nes6502.o \
+raster.o common.o unzip.o gb_cpu.o screenshot.o\
+ gbcpu.o sn76_gg.o \
+gbc.o gg.o nes.o emuio.o mixer.o sound.o z80.o smartgear.o $(ASM).o $(LIBS) -g -o sg_spi ;\
+	sudo chown root:root sg_spi ;\
+	sudo chmod 4755 sg_spi
+
+sg_spi.o: sg_spi.c
+	$(CC) $(CFLAGS) sg_spi.c
+
+screenshot.o: screenshot.c
+	$(CC) $(CFLAGS) screenshot.c
+
+$(ASM).o: $(ASM).s
+	$(CC) $(CFLAGS) $(ASM).s
+
+gb_cpu.o: gb_cpu.s
+	$(CC) $(CFLAGS) -Wa,--defsym,$(ASMTYPE)=1 gb_cpu.s
+
+nes6502.o: nes6502.c
+	$(CC) $(CFLAGS) nes6502.c
+
+raster.o: raster.c
+	$(CC) $(CFLAGS) raster.c
+
+common.o: common.c
+	$(CC) $(CFLAGS) common.c
+
+unzip.o: unzip.c
+	$(CC) $(CFLAGS) unzip.c
+
+gbcpu.o: gbcpu.c
+	$(CC) $(CFLAGS) gbcpu.c
+
+sn76_gg.o: sn76_gg.c
+	$(CC) $(CFLAGS) sn76_gg.c
+
+gbc.o: gbc.c
+	$(CC) $(CFLAGS) gbc.c
+
+gg.o: gg.c
+	$(CC) $(CFLAGS) gg.c
+
+nes.o: nes.c
+	$(CC) $(CFLAGS) nes.c
+
+emuio.o: emuio.c
+	$(CC) $(CFLAGS) emuio.c
+
+mixer.o: mixer.c
+	$(CC) $(CFLAGS) mixer.c
+
+sound.o: sound.c
+	$(CC) $(CFLAGS) sound.c
+
+z80.o: z80.c
+	$(CC) $(CFLAGS) z80.c
+
+smartgear.o: smartgear.c
+	$(CC) $(CFLAGS) smartgear.c
+
+clean:
+	rm *.o sg_spi
+
