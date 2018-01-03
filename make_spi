@@ -2,7 +2,7 @@ PROCESSOR:=$(shell uname -m)
 ifeq ($(PROCESSOR), armv7l)
 ASM=graphics
 ASMTYPE=ARM
-CFLAGS=-c -ggdb -Wall -DUSE_SIMD -DPORTABLE -O2 -marm -march=armv7-a -mfloat-abi=hard -mfpu=neon
+CFLAGS=-c -Wall -DUSE_SIMD -DPORTABLE -O2 -marm -march=armv7-a -mfloat-abi=hard -mfpu=neon
 else ifeq ($(PROCESSOR), armv6l)
 ASM=graphics
 ASMTYPE=ARM
@@ -10,11 +10,11 @@ CFLAGS=-c -I/usr/local/include -Wall -O3 -DUSE_ARM_ASM -mcpu=arm1136j-s -DPORTAB
 else ifeq ($(PROCESSOR), aarch64)
 ASM=a64_graphics
 ASMTYPE=ARM64
-CFLAGS=-c -ggdb -Wall -D_64BITS_ -DUSE_SIMD -DPORTABLE -O3
+CFLAGS=-c -Wall -D_64BITS_ -DUSE_SIMD -DPORTABLE -O3
 else
 ASM=x64_graphics
 ASMTYPE=X86
-CFLAGS=-c -pg -ggdb -I/usr/local/include -DUSE_SIMD -mssse3 -Wall -D_64BITS_ -DPORTABLE -O2
+CFLAGS=-c -I/usr/local/include -DUSE_SIMD -mssse3 -Wall -D_64BITS_ -DPORTABLE -O2
 endif
 LIBS = -lspi_lcd -lSDL2 -lpthread -lpng -lm -lz
 #LIBS = -lspi_lcd -lSDL2 -lpigpio -lpthread -lpng -lm -lz
@@ -28,7 +28,7 @@ gbc.o gg.o nes.o emuio.o mixer.o sound.o z80.o smartgear.o gb_cpu.o $(ASM).o
 	$(CC) sg_spi.o nes6502.o \
 raster.o common.o unzip.o gb_cpu.o screenshot.o\
  gbcpu.o sn76_gg.o \
-gbc.o gg.o nes.o emuio.o mixer.o sound.o z80.o smartgear.o $(ASM).o $(LIBS) -g -o sg_spi ;\
+gbc.o gg.o nes.o emuio.o mixer.o sound.o z80.o smartgear.o $(ASM).o $(LIBS) -o sg_spi ;\
 	sudo chown root:root sg_spi ;\
 	sudo chmod 4755 sg_spi
 

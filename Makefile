@@ -3,7 +3,7 @@ OPSYS:=$(shell uname -s)
 ifeq ($(PROCESSOR), armv7l)
 ASM=graphics
 ASMTYPE=ARM
-CFLAGS=-c -ggdb -Wall -DUSE_SIMD -DPORTABLE -O3 -marm -march=armv7-a -mfloat-abi=hard -mfpu=neon `pkg-config --cflags gtk+-3.0`
+CFLAGS=-c -Wall -DUSE_SIMD -DPORTABLE -O3 -marm -march=armv7-a -mfloat-abi=hard -mfpu=neon `pkg-config --cflags gtk+-3.0`
 else ifeq ($(PROCESSOR), armv6l)
 ASM=graphics
 ASMTYPE=ARM
@@ -11,11 +11,11 @@ CFLAGS=-c -I/usr/local/include -Wall -O3 -DUSE_ARM_ASM -mcpu=arm1136j-s -DPORTAB
 else ifeq ($(PROCESSOR), aarch64)
 ASM=a64_graphics
 ASMTYPE=ARM64
-CFLAGS=-c -ggdb -Wall -D_64BITS_ -DUSE_SIMD -DPORTABLE -O0 `pkg-config --cflags gtk+-3.0`
+CFLAGS=-c -Wall -D_64BITS_ -DUSE_SIMD -DPORTABLE -O3 `pkg-config --cflags gtk+-3.0`
 else
 ASM=x64_graphics
 ASMTYPE=X86
-CFLAGS=-c -pg -ggdb -I/usr/local/include -DUSE_SIMD -mssse3 -Wall -D_64BITS_ -DPORTABLE -O0 `pkg-config --cflags gtk+-3.0`
+CFLAGS=-c -I/usr/local/include -DUSE_SIMD -mssse3 -Wall -D_64BITS_ -DPORTABLE -O3 `pkg-config --cflags gtk+-3.0`
 endif
 LIBS = -L/usr/local/lib -lSDL2 -lpthread -lpng -lm -lz `pkg-config --libs gtk+-3.0`
 
@@ -25,7 +25,7 @@ sg: sg_main.o nes6502.o \
  raster.o common.o unzip.o \
  gbcpu.o sn76_gg.o \
  gbc.o gg.o nes.o emuio.o mixer.o sound.o z80.o smartgear.o gb_cpu.o $(ASM).o
-	$(CC) -pg -g sg_main.o nes6502.o \
+	$(CC) sg_main.o nes6502.o \
  raster.o common.o unzip.o gb_cpu.o \
  gbcpu.o sn76_gg.o \
  gbc.o gg.o nes.o emuio.o mixer.o sound.o z80.o smartgear.o $(ASM).o $(LIBS) -o sg
