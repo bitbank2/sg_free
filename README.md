@@ -66,4 +66,7 @@ allows it to run as root and not interfere with audio drivers. To start either
 version, just type ./sg or ./sg_spi on the command line.
 <br>
 sg_spi: The menus and file selector are navigated by pressing up/down/A on the given controller (gamepad/keyboard/GPIO).
+<br>
 
+If you find this code useful, please consider buying me a cup of coffee<br>
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=SR4F44J2UR8S4)
